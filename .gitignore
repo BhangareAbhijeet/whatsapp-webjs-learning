@@ -6,3 +6,5 @@ dist/
 build/
 *.log
 .DS_Store
+
+#this is for checking in git hub

@@ -1,0 +1,98 @@
+.message-box{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+}
+
+.message-box h2{
+    margin-bottom:10px;
+}
+
+.message-box p{
+    color:gray;
+    margin-bottom:15px;
+}
+
+.message-box textarea{
+    width:100%;
+    height:220px;
+    resize:none;
+    padding:15px;
+    font-size:16px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    outline:none;
+}
+
+.message-box textarea:focus{
+    border-color:#22c55e;
+}
+
+.message-actions{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin-top:10px;
+    flex-wrap:wrap;
+}
+
+.upload-button,
+.remove-image-button{
+    background:#22c55e;
+    color:white;
+    border:none;
+    padding:10px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.upload-button input{
+    display:none;
+}
+
+.remove-image-button{
+    background:#ef4444;
+}
+
+.image-preview-card{
+    margin-top:12px;
+    border:1px solid #eee;
+    border-radius:10px;
+    padding:12px;
+}
+
+.selected-file-name{
+    margin-bottom:10px;
+    font-weight:600;
+    color:#374151;
+}
+
+.image-preview-box{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:140px;
+    background:#f9fafb;
+    border-radius:8px;
+    overflow:hidden;
+}
+
+.image-preview-box img{
+    max-width:100%;
+    max-height:180px;
+    object-fit:contain;
+}
+
+.message-error{
+    color:#dc2626;
+    margin-top:10px;
+    font-size:14px;
+}
+
+.message-footer{
+    margin-top:10px;
+    color:gray;
+    font-size:14px;
+    text-align:right;
+}

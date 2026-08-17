@@ -1,0 +1,52 @@
+.contact-form-card{
+
+    background:white;
+    padding:20px;
+    border-radius:10px;
+
+}
+
+.contact-form-card h2{
+
+    margin-bottom:20px;
+
+}
+
+.contact-form-card form{
+
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+
+}
+
+.contact-form-card input{
+
+    flex:1;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    outline:none;
+}
+
+.contact-form-card input:focus{
+
+    border-color:#22c55e;
+
+}
+
+.contact-form-card button{
+
+    background:#22c55e;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.contact-form-card button:hover{
+
+    background:#16a34a;
+
+}

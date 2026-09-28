@@ -11,6 +11,7 @@ import {
     logout,
     groups,
     debugGroups,
+    profile,
 } from "../controllers/whatsapp.controller.js";
 
 const router = express.Router();
@@ -60,5 +61,7 @@ router.post("/logout",logout);
 
 router.get("/groups", groups);
 router.get("/debug-groups", debugGroups);
+
+router.get("/profile", profile);
 
 export default router;

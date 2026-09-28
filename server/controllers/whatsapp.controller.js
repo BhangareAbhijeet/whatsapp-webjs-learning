@@ -7,6 +7,7 @@ import {
   logoutWhatsapp,
   getGroups,
   inspectGroupRuntime,
+  getWhatsappProfile
 } from "../whatsapp/client.js";
 
 export const status = async (req, res) => {
@@ -273,6 +274,34 @@ export const debugGroups = async (req, res) => {
     res.status(500).json({
       success: false,
       message: err.message,
+    });
+  }
+};
+
+// ======================================================
+// GET WHATSAPP PROFILE
+// This API sends WhatsApp name + profile photo to frontend
+// ======================================================
+
+export const profile = async (req, res) => {
+  try {
+
+    // Fetch profile from whatsapp-web.js
+    const data = await getWhatsappProfile();
+
+    // Send profile data to React frontend
+    res.json({
+      success: true,
+      profile: data,
+    });
+
+  } catch (error) {
+
+    console.error("❌ Profile Error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };

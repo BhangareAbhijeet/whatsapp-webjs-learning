@@ -112,7 +112,9 @@ export const sendMessage = async (phone, message, imagePath = "") => {
   const state = await whatsappClient.getState().catch(() => "UNKNOWN");
 
   if (!isReady && state !== "CONNECTED") {
-    throw new Error("WhatsApp is disconnected. Please reconnect and try again.");
+    throw new Error(
+      "WhatsApp is disconnected. Please reconnect and try again.",
+    );
   }
 
   if (!phone || (!message && !imagePath)) {
@@ -123,7 +125,9 @@ export const sendMessage = async (phone, message, imagePath = "") => {
   const sendToTarget = async (chatId) => {
     if (imagePath) {
       const media = MessageMedia.fromFilePath(imagePath);
-      await whatsappClient.sendMessage(chatId, media, { caption: message || "" });
+      await whatsappClient.sendMessage(chatId, media, {
+        caption: message || "",
+      });
       return;
     }
 
@@ -181,7 +185,6 @@ export const logoutWhatsapp = async () => {
   }
 };
 
-
 const getGroupId = (chat) => {
   if (chat?.id?._serialized) return chat.id._serialized;
   if (typeof chat?.id === "string") return chat.id;
@@ -192,7 +195,9 @@ const getGroupId = (chat) => {
 };
 
 const getGroupName = (chat) => {
-  return chat?.name || chat?.formattedTitle || chat?.contact?.name || "Unnamed Group";
+  return (
+    chat?.name || chat?.formattedTitle || chat?.contact?.name || "Unnamed Group"
+  );
 };
 
 const isGroupChat = (chat) => {
@@ -214,7 +219,9 @@ export const inspectGroupRuntime = async () => {
       name: chat?.name || chat?.formattedTitle || "",
       isGroup: chat?.isGroup,
       hasGroupMetadata: !!chat?.groupMetadata,
-      groupMetadataKeys: chat?.groupMetadata ? Object.keys(chat.groupMetadata).slice(0, 20) : [],
+      groupMetadataKeys: chat?.groupMetadata
+        ? Object.keys(chat.groupMetadata).slice(0, 20)
+        : [],
       keys: Object.keys(chat || {}).slice(0, 20),
     }));
 
@@ -235,13 +242,15 @@ export const inspectGroupRuntime = async () => {
           return [];
         };
 
-        return getChatModels().slice(0, 20).map((chat) => ({
-          id: chat?.id?._serialized || chat?.id || "",
-          name: chat?.name || chat?.formattedTitle || "",
-          isGroup: chat?.isGroup,
-          hasGroupMetadata: !!chat?.groupMetadata,
-          keys: Object.keys(chat || {}).slice(0, 20),
-        }));
+        return getChatModels()
+          .slice(0, 20)
+          .map((chat) => ({
+            id: chat?.id?._serialized || chat?.id || "",
+            name: chat?.name || chat?.formattedTitle || "",
+            isGroup: chat?.isGroup,
+            hasGroupMetadata: !!chat?.groupMetadata,
+            keys: Object.keys(chat || {}).slice(0, 20),
+          }));
       });
     }
 
@@ -266,7 +275,9 @@ export const getGroups = async () => {
   const state = await whatsappClient.getState().catch(() => "UNKNOWN");
 
   if (!isReady && state !== "CONNECTED") {
-    throw new Error("WhatsApp is not ready yet. Please complete the QR login first.");
+    throw new Error(
+      "WhatsApp is not ready yet. Please complete the QR login first.",
+    );
   }
 
   console.log("Fetching groups...");
@@ -296,7 +307,9 @@ export const getGroups = async () => {
 
         if (window.require) {
           try {
-            const collection = window.require("WAWebCollections")?.Chat?.getModelsArray?.();
+            const collection = window
+              .require("WAWebCollections")
+              ?.Chat?.getModelsArray?.();
             return Array.isArray(collection) ? collection : [];
           } catch (err) {
             return [];
@@ -349,7 +362,9 @@ export const getGroups = async () => {
       }
     }
 
-    console.warn("⚠️ No groups found from getChats(), trying compatibility fallback...");
+    console.warn(
+      "⚠️ No groups found from getChats(), trying compatibility fallback...",
+    );
     return inspectPageStore();
   } catch (error) {
     console.warn("⚠️ getChats() failed, trying compatibility fallback...");
@@ -359,8 +374,94 @@ export const getGroups = async () => {
     } catch (fallbackError) {
       console.error("❌ Group fetch failed:", fallbackError);
       throw new Error(
-        "Unable to fetch WhatsApp groups with the current WhatsApp Web compatibility layer."
+        "Unable to fetch WhatsApp groups with the current WhatsApp Web compatibility layer.",
       );
     }
   }
+  // ======================================================
+  // WHATSAPP PROFILE
+  // Fetch connected WhatsApp account name + profile photo
+  // ======================================================
+
+  export const getWhatsappProfile = async () => {
+    // Check WhatsApp connection state
+    const state = await whatsappClient.getState().catch(() => "UNKNOWN");
+
+    // If WhatsApp is not connected, don't fetch profile
+    if (!isReady && state !== "CONNECTED") {
+      throw new Error("WhatsApp is not connected.");
+    }
+
+    // Get logged-in WhatsApp account information
+    const info = whatsappClient.info;
+
+    // Make sure WhatsApp account information is available
+    if (!info?.wid) {
+      throw new Error("WhatsApp profile is unavailable.");
+    }
+
+    let profilePicUrl = "";
+
+    // Try to fetch WhatsApp profile picture
+    try {
+      profilePicUrl = await whatsappClient.getProfilePicUrl(
+        info.wid._serialized,
+      );
+    } catch (error) {
+      console.warn("⚠️ Profile picture fetch failed:", error.message);
+    }
+
+    // Return profile information to controller
+    return {
+      name: info.pushname || info.name || "WhatsApp User",
+      number: info.wid.user || "",
+      profilePicUrl,
+    };
+  };
+};
+// ======================================================
+// WHATSAPP PROFILE
+// Fetch connected WhatsApp account name + profile photo
+// ======================================================
+
+export const getWhatsappProfile = async () => {
+
+  // Check WhatsApp connection state
+  const state = await whatsappClient
+    .getState()
+    .catch(() => "UNKNOWN");
+
+  // If WhatsApp is not connected, don't fetch profile
+  if (!isReady && state !== "CONNECTED") {
+    throw new Error("WhatsApp is not connected.");
+  }
+
+  // Get logged-in WhatsApp account information
+  const info = whatsappClient.info;
+
+  // Make sure WhatsApp account information is available
+  if (!info?.wid) {
+    throw new Error("WhatsApp profile is unavailable.");
+  }
+
+  let profilePicUrl = "";
+
+  // Try to fetch WhatsApp profile picture
+  try {
+    profilePicUrl = await whatsappClient.getProfilePicUrl(
+      info.wid._serialized
+    );
+  } catch (error) {
+    console.warn(
+      "⚠️ Profile picture fetch failed:",
+      error.message
+    );
+  }
+
+  // Return profile information to controller
+  return {
+    name: info.pushname || info.name || "WhatsApp User",
+    number: info.wid.user || "",
+    profilePicUrl,
+  };
 };
